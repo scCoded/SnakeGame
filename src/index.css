@@ -17,22 +17,41 @@
     background-image: url(http://www.transparenttextures.com/patterns/45-degree-fabric-dark.png);
     overflow: hidden;
 }
-@keyframes random {
+@keyframes super {
   15% { background-color: red; } 
   30% { background-color: yellow; } 
   45% { background-color: green; } 
   60% { background-color: blue; }
-  75% { background-color: white; }  }
+  75% { background-color: white; }
+  100% { background-color:orange; }  }
 
 .snake-dot {
   position: absolute;
   width: 5%;
   height: 5%;
   background-color: darkgreen;
-  /*-webkit-animation: random 15s infinite;
-  animation: random 15s infinite;*/
   border: 1px solid black;
   z-index: 2;
+}
+
+#interesting-food.snake-food.mystery-food {
+  background-image: url("question-mark.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;  ;
+}
+
+#interesting-food.snake-food.super-food {
+  -webkit-animation: super 3s infinite;
+  animation: super 3s infinite;
+}
+
+.super {
+  -webkit-animation: super 3s infinite;
+  animation: super 3s infinite;
+}
+
+#interesting-food.snake-food {
+  background: white;
 }
 
 .head {
@@ -57,3 +76,15 @@
   margin-left: 10px;
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
+
+#scoreUpdates {
+  height: 200px;
+  width: 300px;
+  margin: auto;
+}
+
+span {
+  font-size: 50px;
+  color: red;
+}
+
