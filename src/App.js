@@ -4,21 +4,21 @@ import Food from './Food';
 
 document.body.style.backgroundColor = '##75816B';
 
-function getRandomCoordinates(){
+function getRandomCoordinates() {
   let min = 1;
   let max = 94;
-  let x = Math.floor((Math.random()*(max-min+1)+min)/2)*2;
-  let y =  Math.floor((Math.random()*(max-min+1)+min)/2)*2;
+  let x = Math.floor((Math.random() * (max - min+1) + min) / 2) * 2;
+  let y =  Math.floor((Math.random() * (max - min+1) + min) / 2) * 2;
   return [x,y]
 }
 
 const initialState = {
   food: getRandomCoordinates(),
-  speed: 100,
+  speed: 50,
   direction: 'RIGHT',
   snakeBody: [
-    [0,0],
-    [2,0]
+    [0, 0],
+    [2, 0]
   ]
 }
 
@@ -61,19 +61,19 @@ class App extends Component {
 
     switch (this.state.direction) {
       case 'RIGHT':
-        head = [head[0] + 2, head[1]]; //x,y coord, so x is changed to move by one unit (3% to the right), while y stays the same.
+        head = [head[0] + 1, head[1]]; //x,y coord, so x is changed to move by one unit (3% to the right), while y stays the same.
 
         break;
       case 'LEFT':
-        head = [head[0] - 2, head[1]]; //x,y coord, so x is changed to move one by negative unit (3% to the left), while y stays the same.
+        head = [head[0] - 1, head[1]]; //x,y coord, so x is changed to move one by negative unit (3% to the left), while y stays the same.
 
         break;
       case 'DOWN':
-        head = [head[0], head[1] + 2];  //x,y coord, so x is the same while y moves by one unit(3% downwards)
+        head = [head[0], head[1] + 1];  //x,y coord, so x is the same while y moves by one unit (3% downwards)
 
         break;
       case 'UP':
-        head = [head[0], head[1] - 2]; //x,y coord, so x is the same while y moves by one negative unit(3% upwards)
+        head = [head[0], head[1] - 1]; //x,y coord, so x is the same while y moves by one negative unit (3% upwards)
         break;
     }
     dots.push(head);   //this saves the new head.
@@ -86,7 +86,9 @@ class App extends Component {
 
   collisionWithBorders() {  //the collision with borders defines a collision as when the coordinates of the head of the snake being equal to or exceeding the coordinates of the border lines
     let head = this.state.snakeBody[this.state.snakeBody.length - 1];
-    if (head[0] >= 100 || head[1] >= 100 || head[0] < 0 || head[1] < 0) {
+    if (head[0] >= 96 || head[1] >= 96 || head[0] < 0 || head[1] < 0) {
+      console.log(head[0]);
+      console.log(head[1]);
       this.onGameOver();
     }
   }
@@ -96,7 +98,7 @@ class App extends Component {
     let head = snake[snake.length - 1];
     snake.pop();
     snake.forEach(dot => {  //each part of snake tested against head by going through each body part (aka dot) in the snakeBody array
-      if (head[0] == dot[0] && head[1] == dot[1]) {
+      if (head[0] === dot[0] && head[1] === dot[1]) {
         this.onGameOver();  
       }
     })
@@ -105,28 +107,25 @@ class App extends Component {
   checkIfEaten() {
     let head = this.state.snakeBody[this.state.snakeBody.length - 1];
     let food = this.state.food;
-    if (head[0] == food[0] && head[1] == food[1]) {
-      this.setState({
-        food: getRandomCoordinates()    //if coord of head is equal to the coord of food then food is eaten.
-      })
+    if (Math.abs(head[0] - food[0]) <= 2 && Math.abs(head[1] - food[1]) <= 2) {
+      this.setState({ food: getRandomCoordinates() }) //if coord of head is within 2% of the coord of food, then food is eaten.
       this.increaseSnake();
       this.increaseSpeed();
     }
   }
 
+  //badFood
+  //superFood
+
   increaseSnake() {
     let newSnake = [...this.state.snakeBody];
-    newSnake.unshift([])
-    this.setState({
-      snakeBody: newSnake
-    })
+    newSnake.unshift([]);
+    this.setState({ snakeBody: newSnake });
   }
 
   increaseSpeed() {
     if (this.state.speed > 10) {
-      this.setState({
-        speed: this.state.speed - 10
-      })
+      this.setState({ speed: this.state.speed - 10 });
     }
   }
 
@@ -138,7 +137,8 @@ class App extends Component {
   render() {
     return (
       <div className="grid">
-        <p class="textScore">Score : {this.state.snakeBody.length}</p>
+        <p className="textScore">Score : {this.state.snakeBody.length}</p>
+        <p className="textScore">Level : {Math.ceil(this.state.snakeBody.length / 5)}</p>
         <Snake snakeBody={this.state.snakeBody}/>
         <Food dot={this.state.food}/>
       </div>
